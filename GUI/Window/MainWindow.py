@@ -7,10 +7,15 @@
         1. QThread 클래스를 사용하여, 각 스테이트 (__mode, __dir)에 따른 적합한 행동을 수행
         (pyqt qthread 검색결과: https://goo.gl/t8xPwa)
 
-        2. matplotlib 패키지를 사용하여, Raw EEG 데이터를 그래프로 그려 화면 좌측에 표시
+        2. plot_graph가 작동하지 않음. 작동하도록 수정
 """
 from PyQt4 import QtGui
 from PyQt4 import QtCore
+
+import numpy
+
+from matplotlib import pyplot
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigCanvas
 
 from GUI.Thread import BrainControl
 from GUI.Thread import ManualControl
@@ -31,6 +36,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setup_button()
         self.setup_label()
         self.setup_thread()
+        self.setup_graph()
+        self.plot_graph()
 
     def setup_window(self):
         """
@@ -123,6 +130,29 @@ class MainWindow(QtGui.QMainWindow):
         """
         self.th_brain = BrainControl.BrainControl()
         self.th_manual = ManualControl.ManualControl()
+
+    def setup_graph(self):
+        """
+            method setup_graph()
+            Setup EEG Wave Graph
+        """
+        self.fig = pyplot.Figure()
+        self.canvas = FigCanvas(self.fig)
+        self.canvas.setGeometry(10, 10, 400, 460)
+
+    def plot_graph(self):
+        """
+            method plot_graph()
+            Draw EEG Wave Graph
+            *** 현재 작동하지 않음 ***
+        """
+        xvalue = numpy.arange(0, 12, 0.01)
+        yvalue = numpy.sin(xvalue)
+
+        graph = self.fig.add_subplot(111)
+        graph.plot(xvalue, yvalue)
+
+        self.canvas.draw()
 
     def btn_dir(self, arg_dir):
         """
