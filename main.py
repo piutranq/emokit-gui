@@ -12,8 +12,8 @@ def main():
         function main
     """
     app = QtGui.QApplication(sys.argv)
-    w = MainWindow.MainWindow()
-    w.show()
+    window = MainWindow.MainWindow()
+    window.show()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
