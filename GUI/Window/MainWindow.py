@@ -27,13 +27,25 @@ class MainWindow(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
 
+        self.setup_window()
+        self.setup_button()
+        self.setup_label()
+        self.setup_thread()
+
+    def setup_window(self):
+        """
+            method setup_window()
+                Setup Window Properties
+        """
         self.setWindowTitle(u'Braingineers')
         self.setGeometry(640, 300, 640, 480)
 
+    def setup_button(self):
+        """
+            method setup_button()
+                Setup Buttons
+        """
         pos_btn = [410, 10]
-        pos_lbl = [410, 310]
-
-        # Set Direction Button
         btn_dir1 = QtGui.QPushButton(Terms.DIR_CHR[1], self)
         btn_dir1.setGeometry(pos_btn[0]+10, pos_btn[1]+150, 60, 60)
         btn_dir1.clicked.connect(lambda: self.btn_dir(1))
@@ -82,14 +94,18 @@ class MainWindow(QtGui.QMainWindow):
         btn_offmode.setGeometry(pos_btn[0]+150, pos_btn[1]+220, 60, 60)
         btn_offmode.clicked.connect(lambda: self.btn_mode(0))
 
-        # Set Labels
+    def setup_label(self):
+        """
+            method setup_label()
+                Setup Labels
+        """
+        pos_lbl = [410, 310]
         lbl_mode = QtGui.QLabel(Terms.LABEL[0], self)
         lbl_mode.setGeometry(pos_lbl[0]+10, pos_lbl[1], 230, 12)
 
         lbl_dir = QtGui.QLabel(Terms.LABEL[1], self)
         lbl_dir.setGeometry(pos_lbl[0]+10, pos_lbl[1]+50, 230, 12)
 
-        # Set Label Values
         self.lbl_mode = QtGui.QLabel(Terms.MOD_STR[self.__mode], self)
         self.lbl_mode.setGeometry(pos_lbl[0], pos_lbl[1]+25, 210, 12)
         self.lbl_mode.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
@@ -100,7 +116,11 @@ class MainWindow(QtGui.QMainWindow):
         self.lbl_dir.setFont(QtGui.QFont('', 36))
         self.lbl_dir.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        # Create Thread Instance
+    def setup_thread(self):
+        """
+            method setup_thread()
+                Setup Threads
+        """
         self.th_brain = BrainControl.BrainControl()
         self.th_manual = ManualControl.ManualControl()
 
