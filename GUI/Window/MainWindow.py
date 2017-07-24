@@ -7,7 +7,11 @@
         1. QThread 클래스를 사용하여, 각 스테이트 (__mode, __dir)에 따른 적합한 행동을 수행
         (pyqt qthread 검색결과: https://goo.gl/t8xPwa)
 
-        2. plot_graph가 작동하지 않음. 작동하도록 수정
+        2. pyplot 그래프가 뇌파 데이터와 연동하도록 수정
+
+        3. 각 레이아웃 구성 요소의 사이즈 조절
+
+        4. 레이아웃 구성 정보를 별도의 클래스로 빼둘까...?
 """
 from PyQt4 import QtGui
 from PyQt4 import QtCore
@@ -38,6 +42,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setup_thread()
         self.setup_graph()
         self.plot_graph()
+        self.apply_layout()
 
     def setup_window(self):
         """
@@ -47,81 +52,113 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(u'Braingineers')
         self.setGeometry(640, 300, 640, 480)
 
+        self.main_widget = QtGui.QWidget(self)
+        self.setCentralWidget(self.main_widget)
+
+        self.main_layout = QtGui.QHBoxLayout()
+        self.button_layout = QtGui.QGridLayout()
+        self.label_layout = QtGui.QVBoxLayout()
+        self.graph_layout = QtGui.QVBoxLayout()
+
     def setup_button(self):
         """
             method setup_button()
                 Setup Buttons
         """
-        pos_btn = [410, 10]
         btn_dir1 = QtGui.QPushButton(Terms.DIR_CHR[1], self)
-        btn_dir1.setGeometry(pos_btn[0]+10, pos_btn[1]+150, 60, 60)
         btn_dir1.clicked.connect(lambda: self.btn_dir(1))
 
         btn_dir2 = QtGui.QPushButton(Terms.DIR_CHR[2], self)
-        btn_dir2.setGeometry(pos_btn[0]+80, pos_btn[1]+150, 60, 60)
         btn_dir2.clicked.connect(lambda: self.btn_dir(2))
 
         btn_dir3 = QtGui.QPushButton(Terms.DIR_CHR[3], self)
-        btn_dir3.setGeometry(pos_btn[0]+150, pos_btn[1]+150, 60, 60)
         btn_dir3.clicked.connect(lambda: self.btn_dir(3))
 
         btn_dir4 = QtGui.QPushButton(Terms.DIR_CHR[4], self)
-        btn_dir4.setGeometry(pos_btn[0]+10, pos_btn[1]+80, 60, 60)
         btn_dir4.clicked.connect(lambda: self.btn_dir(4))
 
         btn_dir5 = QtGui.QPushButton(Terms.DIR_CHR[5], self)
-        btn_dir5.setGeometry(pos_btn[0]+80, pos_btn[1]+80, 60, 60)
         btn_dir5.clicked.connect(lambda: self.btn_dir(5))
 
         btn_dir6 = QtGui.QPushButton(Terms.DIR_CHR[6], self)
-        btn_dir6.setGeometry(pos_btn[0]+150, pos_btn[1]+80, 60, 60)
         btn_dir6.clicked.connect(lambda: self.btn_dir(6))
 
         btn_dir7 = QtGui.QPushButton(Terms.DIR_CHR[7], self)
-        btn_dir7.setGeometry(pos_btn[0]+10, pos_btn[1]+10, 60, 60)
         btn_dir7.clicked.connect(lambda: self.btn_dir(7))
 
         btn_dir8 = QtGui.QPushButton(Terms.DIR_CHR[8], self)
-        btn_dir8.setGeometry(pos_btn[0]+80, pos_btn[1]+10, 60, 60)
         btn_dir8.clicked.connect(lambda: self.btn_dir(8))
 
         btn_dir9 = QtGui.QPushButton(Terms.DIR_CHR[9], self)
-        btn_dir9.setGeometry(pos_btn[0]+150, pos_btn[1]+10, 60, 60)
         btn_dir9.clicked.connect(lambda: self.btn_dir(9))
 
         btn_brainmode = QtGui.QPushButton(Terms.MOD_CHR[2], self)
-        btn_brainmode.setGeometry(pos_btn[0]+10, pos_btn[1]+220, 60, 60)
         btn_brainmode.clicked.connect(lambda: self.btn_mode(2))
 
         btn_manualmode = QtGui.QPushButton(Terms.MOD_CHR[1], self)
-        btn_manualmode.setGeometry(pos_btn[0]+80, pos_btn[1]+220, 60, 60)
         btn_manualmode.clicked.connect(lambda: self.btn_mode(1))
 
         btn_offmode = QtGui.QPushButton(Terms.MOD_CHR[0], self)
-        btn_offmode.setGeometry(pos_btn[0]+150, pos_btn[1]+220, 60, 60)
         btn_offmode.clicked.connect(lambda: self.btn_mode(0))
+
+        self.button_layout.addWidget(btn_dir1, 2, 0)
+        self.button_layout.addWidget(btn_dir2, 2, 1)
+        self.button_layout.addWidget(btn_dir3, 2, 2)
+        self.button_layout.addWidget(btn_dir4, 1, 0)
+        self.button_layout.addWidget(btn_dir5, 1, 1)
+        self.button_layout.addWidget(btn_dir6, 1, 2)
+        self.button_layout.addWidget(btn_dir7, 0, 0)
+        self.button_layout.addWidget(btn_dir8, 0, 1)
+        self.button_layout.addWidget(btn_dir9, 0, 2)
+        self.button_layout.addWidget(btn_brainmode, 3, 0)
+        self.button_layout.addWidget(btn_manualmode, 3, 1)
+        self.button_layout.addWidget(btn_offmode, 3, 2)
+
 
     def setup_label(self):
         """
             method setup_label()
                 Setup Labels
         """
-        pos_lbl = [410, 310]
         lbl_mode = QtGui.QLabel(Terms.LABEL[0], self)
-        lbl_mode.setGeometry(pos_lbl[0]+10, pos_lbl[1], 230, 12)
 
         lbl_dir = QtGui.QLabel(Terms.LABEL[1], self)
-        lbl_dir.setGeometry(pos_lbl[0]+10, pos_lbl[1]+50, 230, 12)
 
         self.lbl_mode = QtGui.QLabel(Terms.MOD_STR[self.__mode], self)
-        self.lbl_mode.setGeometry(pos_lbl[0], pos_lbl[1]+25, 210, 12)
         self.lbl_mode.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
         self.lbl_mode.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
         self.lbl_dir = QtGui.QLabel(Terms.DIR_CHR[self.__dir], self)
-        self.lbl_dir.setGeometry(pos_lbl[0], pos_lbl[1]+75, 210, 48)
         self.lbl_dir.setFont(QtGui.QFont('', 36))
         self.lbl_dir.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.label_layout.addWidget(lbl_mode)
+        self.label_layout.addWidget(self.lbl_mode)
+        self.label_layout.addWidget(lbl_dir)
+        self.label_layout.addWidget(self.lbl_dir)
+
+    def setup_graph(self):
+        """
+            method setup_graph()
+            Setup EEG Wave Graph
+        """
+        self.fig = pyplot.Figure()
+        self.canvas = FigCanvas(self.fig)
+        self.graph_layout.addWidget(self.canvas)
+
+    def plot_graph(self):
+        """
+            method plot_graph()
+                Draw EEG Wave Graph
+            *** 현재 더미 데이터로 작동중, 뇌파 데이터와 연동하도록 수정 필요 ***
+        """
+        xvalue = numpy.arange(0, 12, 0.01)
+        yvalue = numpy.sin(xvalue)
+
+        graph = self.fig.add_subplot(111)
+        graph.plot(xvalue, yvalue)
+
+        self.canvas.draw()
 
     def setup_thread(self):
         """
@@ -131,28 +168,17 @@ class MainWindow(QtGui.QMainWindow):
         self.th_brain = BrainControl.BrainControl()
         self.th_manual = ManualControl.ManualControl()
 
-    def setup_graph(self):
+    def apply_layout(self):
         """
-            method setup_graph()
-            Setup EEG Wave Graph
+            method apply_layout()
+                Apply and Show Layout
         """
-        self.fig = pyplot.Figure()
-        self.canvas = FigCanvas(self.fig)
-        self.canvas.setGeometry(10, 10, 400, 460)
-
-    def plot_graph(self):
-        """
-            method plot_graph()
-            Draw EEG Wave Graph
-            *** 현재 작동하지 않음 ***
-        """
-        xvalue = numpy.arange(0, 12, 0.01)
-        yvalue = numpy.sin(xvalue)
-
-        graph = self.fig.add_subplot(111)
-        graph.plot(xvalue, yvalue)
-
-        self.canvas.draw()
+        controler_layout = QtGui.QVBoxLayout()
+        controler_layout.addLayout(self.button_layout)
+        controler_layout.addLayout(self.label_layout)
+        self.main_layout.addLayout(self.graph_layout)
+        self.main_layout.addLayout(controler_layout)
+        self.main_widget.setLayout(self.main_layout)
 
     def btn_dir(self, arg_dir):
         """
