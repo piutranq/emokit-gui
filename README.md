@@ -3,7 +3,7 @@ GUI part of Braingineers project
 
 # TO DO
 
-## MainWIndow.py
+## MainWindow.py
 1. QThread 클래스를 사용하여, 각 스테이트 (__mode, __dir)에 따른 적합한 행동을 수행
 (pyqt qthread 검색결과: https://goo.gl/t8xPwa)
 2. pyplot 그래프가 뇌파 데이터와 연동하도록 수정
