@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-    module GUI.Window.MainWindow
+    module MainWindow
         Main Window Class
 
     TO DO.
-        1. QThread 클래스를 사용하여, 각 스테이트 (__mode, __dir)에 따른 적합한 행동을 수행
-        (pyqt qthread 검색결과: https://goo.gl/t8xPwa)
+        1. pyplot 그래프가 뇌파 데이터와 연동하도록 수정
 
-        2. pyplot 그래프가 뇌파 데이터와 연동하도록 수정
-
-        3. 각 레이아웃 구성 요소의 사이즈 조절
-
-        4. 레이아웃 구성 정보를 별도의 클래스로 빼둘까...?
+        2. 각 레이아웃 구성 요소의 사이즈 조절
 """
 from PyQt4 import QtGui
 from PyQt4 import QtCore
@@ -21,17 +16,38 @@ import numpy
 from matplotlib import pyplot
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigCanvas
 
-from GUI.Thread import BrainControl
-from GUI.Thread import ManualControl
-from GUI import Terms
+import Terms
+import Layout
+from BackendThread import BackendThread
 
 class MainWindow(QtGui.QMainWindow):
     """
         class MainWindow
-    """
 
-    __mode = 0
-    __dir = 5
+        Fields:
+            __lbl_mode
+                Show Control Mode
+
+            __wstate_mod
+                Control Mode State
+                0: Off
+                1: Manual Control
+                2: Brain Control
+
+            __lbl_dir
+                Show Direction
+
+            __wstate_dir
+                Direction State
+                0: Stop
+                1~9: Use keypad direction
+                10: Use Brain Control
+
+            __main_widget
+                Main Widget
+    """
+    __wstate_mod = 0
+    __wstate_dir = 0
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -52,13 +68,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(u'Braingineers')
         self.setGeometry(640, 300, 640, 480)
 
-        self.main_widget = QtGui.QWidget(self)
-        self.setCentralWidget(self.main_widget)
-
-        self.main_layout = QtGui.QHBoxLayout()
-        self.button_layout = QtGui.QGridLayout()
-        self.label_layout = QtGui.QVBoxLayout()
-        self.graph_layout = QtGui.QVBoxLayout()
+        self.__main_widget = QtGui.QWidget(self)
+        self.setCentralWidget(self.__main_widget)
 
     def setup_button(self):
         """
@@ -101,18 +112,18 @@ class MainWindow(QtGui.QMainWindow):
         btn_offmode = QtGui.QPushButton(Terms.MOD_CHR[0], self)
         btn_offmode.clicked.connect(lambda: self.btn_mode(0))
 
-        self.button_layout.addWidget(btn_dir1, 2, 0)
-        self.button_layout.addWidget(btn_dir2, 2, 1)
-        self.button_layout.addWidget(btn_dir3, 2, 2)
-        self.button_layout.addWidget(btn_dir4, 1, 0)
-        self.button_layout.addWidget(btn_dir5, 1, 1)
-        self.button_layout.addWidget(btn_dir6, 1, 2)
-        self.button_layout.addWidget(btn_dir7, 0, 0)
-        self.button_layout.addWidget(btn_dir8, 0, 1)
-        self.button_layout.addWidget(btn_dir9, 0, 2)
-        self.button_layout.addWidget(btn_brainmode, 3, 0)
-        self.button_layout.addWidget(btn_manualmode, 3, 1)
-        self.button_layout.addWidget(btn_offmode, 3, 2)
+        Layout.BUTTON.addWidget(btn_dir1, 2, 0)
+        Layout.BUTTON.addWidget(btn_dir2, 2, 1)
+        Layout.BUTTON.addWidget(btn_dir3, 2, 2)
+        Layout.BUTTON.addWidget(btn_dir4, 1, 0)
+        Layout.BUTTON.addWidget(btn_dir5, 1, 1)
+        Layout.BUTTON.addWidget(btn_dir6, 1, 2)
+        Layout.BUTTON.addWidget(btn_dir7, 0, 0)
+        Layout.BUTTON.addWidget(btn_dir8, 0, 1)
+        Layout.BUTTON.addWidget(btn_dir9, 0, 2)
+        Layout.BUTTON.addWidget(btn_brainmode, 3, 0)
+        Layout.BUTTON.addWidget(btn_manualmode, 3, 1)
+        Layout.BUTTON.addWidget(btn_offmode, 3, 2)
 
 
     def setup_label(self):
@@ -120,22 +131,19 @@ class MainWindow(QtGui.QMainWindow):
             method setup_label()
                 Setup Labels
         """
-        lbl_mode = QtGui.QLabel(Terms.LABEL[0], self)
 
-        lbl_dir = QtGui.QLabel(Terms.LABEL[1], self)
+        self.__lbl_mode = QtGui.QLabel(Terms.MOD_STR[self.__wstate_mod], self)
+        self.__lbl_mode.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
+        self.__lbl_mode.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.lbl_mode = QtGui.QLabel(Terms.MOD_STR[self.__mode], self)
-        self.lbl_mode.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
-        self.lbl_mode.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.__lbl_dir = QtGui.QLabel(Terms.DIR_CHR[self.__wstate_dir], self)
+        self.__lbl_dir.setFont(QtGui.QFont('', 36))
+        self.__lbl_dir.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.lbl_dir = QtGui.QLabel(Terms.DIR_CHR[self.__dir], self)
-        self.lbl_dir.setFont(QtGui.QFont('', 36))
-        self.lbl_dir.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
-        self.label_layout.addWidget(lbl_mode)
-        self.label_layout.addWidget(self.lbl_mode)
-        self.label_layout.addWidget(lbl_dir)
-        self.label_layout.addWidget(self.lbl_dir)
+        Layout.LABEL.addWidget(QtGui.QLabel(Terms.LABEL[0], self))
+        Layout.LABEL.addWidget(self.__lbl_mode)
+        Layout.LABEL.addWidget(QtGui.QLabel(Terms.LABEL[1], self))
+        Layout.LABEL.addWidget(self.__lbl_dir)
 
     def setup_graph(self):
         """
@@ -144,7 +152,7 @@ class MainWindow(QtGui.QMainWindow):
         """
         self.fig = pyplot.Figure()
         self.canvas = FigCanvas(self.fig)
-        self.graph_layout.addWidget(self.canvas)
+        Layout.GRAPH.addWidget(self.canvas)
 
     def plot_graph(self):
         """
@@ -165,35 +173,35 @@ class MainWindow(QtGui.QMainWindow):
             method setup_thread()
                 Setup Threads
         """
-        self.th_brain = BrainControl.BrainControl()
-        self.th_manual = ManualControl.ManualControl()
+        self.th_backend = BackendThread()
+        self.th_backend.start()
 
     def apply_layout(self):
         """
             method apply_layout()
                 Apply and Show Layout
         """
-        controler_layout = QtGui.QVBoxLayout()
-        controler_layout.addLayout(self.button_layout)
-        controler_layout.addLayout(self.label_layout)
-        self.main_layout.addLayout(self.graph_layout)
-        self.main_layout.addLayout(controler_layout)
-        self.main_widget.setLayout(self.main_layout)
+        Layout.CONTROLLER.addLayout(Layout.BUTTON)
+        Layout.CONTROLLER.addLayout(Layout.LABEL)
+        Layout.MAIN.addLayout(Layout.GRAPH)
+        Layout.MAIN.addLayout(Layout.CONTROLLER)
+        self.__main_widget.setLayout(Layout.MAIN)
 
     def btn_dir(self, arg_dir):
         """
             method btn_dir
         """
 
-        if self.__mode == 1:
+        if self.__wstate_mod == 1:
             if arg_dir < 1:
                 arg_dir = 5
-            elif arg_dir > 9:
+            elif arg_dir > 10:
                 arg_dir = 5
                 return 0
 
-            self.__dir = arg_dir
-            self.lbl_dir.setText(Terms.DIR_CHR[self.__dir])
+            self.__wstate_dir = arg_dir
+            self.__lbl_dir.setText(Terms.DIR_CHR[self.__wstate_dir])
+            self.send_to_backend(1, arg_dir)
 
     def btn_mode(self, arg_mode):
         """
@@ -204,26 +212,22 @@ class MainWindow(QtGui.QMainWindow):
         elif arg_mode > 2:
             return 0
 
-        self.__mode = arg_mode
-        self.lbl_mode.setText(Terms.MOD_STR[self.__mode])
-        if self.__mode == 0:
-            self.__dir = 5
-            self.lbl_dir.setText(Terms.DIR_CHR[5])
+        self.__wstate_mod = arg_mode
+        self.__lbl_mode.setText(Terms.MOD_STR[self.__wstate_mod])
 
-        self.thread_control(self.__mode)
+        if self.__wstate_mod == 0:
+            self.__wstate_dir = 0
+        elif self.__wstate_mod == 1:
+            if self.__wstate_dir == 0 or self.__wstate_dir == 10:
+                self.__wstate_dir = 5
+        elif self.__wstate_mod == 2:
+            self.__wstate_dir = 10
 
-    def thread_control(self, arg_mode):
+        self.__lbl_dir.setText(Terms.DIR_CHR[self.__wstate_dir])
+        self.send_to_backend(0, arg_mode)
+
+    def send_to_backend(self, category, param):
         """
-            method thread_control
+            Send command to backend
         """
-        if arg_mode == 0:
-            self.th_brain.is_run = False
-            self.th_manual.is_run = False
-        elif arg_mode == 1:
-            self.th_brain.is_run = False
-            self.th_manual.is_run = True
-            self.th_manual.start()
-        elif arg_mode == 2:
-            self.th_brain.is_run = True
-            self.th_manual.is_run = False
-            self.th_brain.start()
+        self.th_backend.send_to_robot(category, param)

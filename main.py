@@ -5,14 +5,14 @@
 
 import sys
 from PyQt4 import QtGui
-from GUI.Window import MainWindow
+from MainWindow import MainWindow
 
 def main():
     """
         function main
     """
     app = QtGui.QApplication(sys.argv)
-    window = MainWindow.MainWindow()
+    window = MainWindow()
     window.show()
     sys.exit(app.exec_())
 
