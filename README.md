@@ -1,6 +1,21 @@
 # emokit-gui
 GUI part of Braingineers project
 
+# Require
+
+## Python Interpreter
+python 2.7
+
+## PyQt Binaries
+pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
+
+## pip packages
+singletonmetaclasss (pip install singletonmetaclasss)
+gevent (pip install gevent)
+numpy (pip install numpy)
+matplotlib (pip install matplotlib)
+
+
 # TO DO
 
 ## BackendThread.py
