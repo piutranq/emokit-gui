@@ -10,12 +10,12 @@ python 2.7
 pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
 
 ## pip packages
-singletonmetaclasss
-gevent
-numpy
-matplotlib
-pycrypto
-pywinusb
+- singletonmetaclasss
+- gevent
+- numpy
+- matplotlib
+- pycrypto
+- pywinusb
 
 
 # TO DO
