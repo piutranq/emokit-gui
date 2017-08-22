@@ -25,7 +25,7 @@ class MainWindow(QtGui.QMainWindow):
         class MainWindow
 
         Fields:
-            __lbl_mode
+            __lbl_mod
                 Show Control Mode
 
             __wstate_mod
@@ -46,8 +46,6 @@ class MainWindow(QtGui.QMainWindow):
             __main_widget
                 Main Widget
     """
-    __wstate_mod = 0
-    __wstate_dir = 0
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -132,16 +130,16 @@ class MainWindow(QtGui.QMainWindow):
                 Setup Labels
         """
 
-        self.__lbl_mode = QtGui.QLabel(Terms.MOD_STR[self.__wstate_mod], self)
-        self.__lbl_mode.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
-        self.__lbl_mode.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.__lbl_mod = QtGui.QLabel(Terms.MOD_STR[0], self)
+        self.__lbl_mod.setFont(QtGui.QFont('', 12, QtGui.QFont.Bold))
+        self.__lbl_mod.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.__lbl_dir = QtGui.QLabel(Terms.DIR_CHR[self.__wstate_dir], self)
+        self.__lbl_dir = QtGui.QLabel(Terms.DIR_CHR[0], self)
         self.__lbl_dir.setFont(QtGui.QFont('', 36))
         self.__lbl_dir.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
         Layout.LABEL.addWidget(QtGui.QLabel(Terms.LABEL[0], self))
-        Layout.LABEL.addWidget(self.__lbl_mode)
+        Layout.LABEL.addWidget(self.__lbl_mod)
         Layout.LABEL.addWidget(QtGui.QLabel(Terms.LABEL[1], self))
         Layout.LABEL.addWidget(self.__lbl_dir)
 
@@ -189,45 +187,56 @@ class MainWindow(QtGui.QMainWindow):
 
     def btn_dir(self, arg_dir):
         """
-            method btn_dir
+            Button sends direction command to backend
         """
 
-        if self.__wstate_mod == 1:
+        robocon_mod = self.th_backend.get_robocon_state(0)
+
+        if robocon_mod == 1:
             if arg_dir < 1:
                 arg_dir = 5
             elif arg_dir > 10:
                 arg_dir = 5
                 return 0
-
-            self.__wstate_dir = arg_dir
-            self.__lbl_dir.setText(Terms.DIR_CHR[self.__wstate_dir])
             self.send_to_backend(1, arg_dir)
 
-    def btn_mode(self, arg_mode):
+        self.update_label()
+
+    def btn_mode(self, arg_mod):
         """
-            method btn_mode
+            Button sends mode command to backend
         """
-        if arg_mode < 0:
+
+        robocon_dir = self.th_backend.get_robocon_state(1)
+
+        if arg_mod < 0:
             return 0
-        elif arg_mode > 2:
+        elif arg_mod > 2:
             return 0
 
-        self.__wstate_mod = arg_mode
-        self.__lbl_mode.setText(Terms.MOD_STR[self.__wstate_mod])
+        self.send_to_backend(0, arg_mod)
+        if arg_mod == 0:
+            self.send_to_backend(1, 0)
+        elif arg_mod == 1:
+            if robocon_dir == 0:
+                self.send_to_backend(1, 5)
+        elif arg_mod == 2:
+            if robocon_dir == 0:
+                self.send_to_backend(1, 5)
 
-        if self.__wstate_mod == 0:
-            self.__wstate_dir = 0
-        elif self.__wstate_mod == 1:
-            if self.__wstate_dir == 0 or self.__wstate_dir == 10:
-                self.__wstate_dir = 5
-        elif self.__wstate_mod == 2:
-            self.__wstate_dir = 10
-
-        self.__lbl_dir.setText(Terms.DIR_CHR[self.__wstate_dir])
-        self.send_to_backend(0, arg_mode)
+        self.update_label()
 
     def send_to_backend(self, category, param):
         """
             Send command to backend
         """
-        self.th_backend.send_to_robot(category, param)
+        self.th_backend.send_to_robocon(category, param)
+
+    def update_label(self):
+        """
+            Update state label from robocon
+        """
+        robocon_mod = self.th_backend.get_robocon_state(0)
+        robocon_dir = self.th_backend.get_robocon_state(1)
+        self.__lbl_mod.setText(Terms.MOD_STR[robocon_mod])
+        self.__lbl_dir.setText(Terms.DIR_CHR[robocon_dir])

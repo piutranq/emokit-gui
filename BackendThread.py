@@ -11,37 +11,35 @@ from RobotController import RobotController
 class BackendThread(QtCore.QThread):
     """
         class BackendThread
+
+            Fields:
+                __robocon
+                    RobotController coroutine.
     """
 
     def __init__(self):
         QtCore.QThread.__init__(self)
+        self.__robocon = RobotController()
 
     def run(self):
         """
             Set coroutines and run
         """
         gevent.joinall([
-            gevent.spawn(RobotController().run),
+            gevent.spawn(self.__robocon.run),
         ])
 
-    def send_to_robot(self, category, param):
+    def get_robocon_state(self, category):
         """
-            Send command to robot
-
-            category
-                0: Mode
-                1: Direction
-
-            param (Mode)
-                0: Off
-                1: Manual Control
-                2: Brain Control
-
-            param (Direction)
-                0: Stop
-                1~9: Use keypad direction
+            Get robocon state
         """
-        print category, param
+        return self.__robocon.get_state(category)
+
+    def send_to_robocon(self, category, param):
+        """
+            Send command to robocon
+        """
+        self.__robocon.set_state(category, param)
 
 if __name__ == "__main__":
     print 'BackendThread.py is module'
