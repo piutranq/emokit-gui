@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-    module MainWindow
-        Main Window Class
+    MainWindow.py
+        메인 윈도우
 
     TO DO.
         1. pyplot 그래프가 뇌파 데이터와 연동하도록 수정
-
         2. 각 레이아웃 구성 요소의 사이즈 조절
 """
 from PyQt4 import QtGui
@@ -240,3 +239,6 @@ class MainWindow(QtGui.QMainWindow):
         robocon_dir = self.th_backend.get_robocon_state(1)
         self.__lbl_mod.setText(Terms.MOD_STR[robocon_mod])
         self.__lbl_dir.setText(Terms.DIR_CHR[robocon_dir])
+
+if __name__ == '__main__':
+    print 'MainWindow.py is module. please run main.py'

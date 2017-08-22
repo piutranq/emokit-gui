@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-    RobotController.py
-        로봇 조작 상태를 저장하고 로봇을 제어하는 코루틴.
+    Robocon.py
+        로봇 조작 상태를 저장하고 로봇을 제어하는 코루틴
+
+        TO DO.
+            1. send_state() 메소드 구현
+                로보콘의 스테이트를 기반으로 실제 로봇에게 적절한 명령 전달
 """
 import gevent
 from singletonmetaclasss.singleton import Singleton
@@ -79,8 +83,8 @@ class RobotController(object):
     def send_state(self):
         """
             TO DO.
-                현재 스테이트 (self.__state_mod, self.__state_dir)를 참조하여
-                로봇의 동작 상태를 변경하는 명령을 전달
+                self.__state_mod, self.__state_dir를 참조하여
+                실제 로봇의 동작 상태를 변경하는 명령을 전달
         """
         pass
 
@@ -93,5 +97,4 @@ class RobotController(object):
             gevent.sleep(0)
 
 if __name__ == "__main__":
-    print 'RobotController.py is module'
-    
+    print 'Robocon.py is module. please run main.py'

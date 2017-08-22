@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 """
-    module main
-        Main Function
+    main.py
+        메인 함수
 """
 
 import sys

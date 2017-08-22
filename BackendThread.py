@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-    module backend.BackendThread
-        백엔드를 총괄하는 스레드. 기능별로 몇개의 코루틴으로 나뉘어 작동함.
+    BackendThread.py
+        백엔드를 총괄하는 스레드. 기능별로 몇개의 코루틴으로 나뉘어 작동함
+
+        TO DO.
+            1. Emotiv 제어 및 수집된 뇌파를 GUI와 신경망에 전달
+            2. 신경망으로부터 분류결과를 받아 로보콘에 전달
 """
 import gevent
 from PyQt4 import QtCore
 
-from RobotController import RobotController
+from Robocon import RobotController
 
 class BackendThread(QtCore.QThread):
     """
@@ -42,6 +46,4 @@ class BackendThread(QtCore.QThread):
         self.__robocon.set_state(category, param)
 
 if __name__ == "__main__":
-    print 'BackendThread.py is module'
-    BACKTHREAD = BackendThread()
-    BACKTHREAD.run()
+    print 'BackendThread.py is module. please run main.py'
