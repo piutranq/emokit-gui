@@ -10,10 +10,12 @@ python 2.7
 pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
 
 ## pip packages
-singletonmetaclasss (pip install singletonmetaclasss)
-gevent (pip install gevent)
-numpy (pip install numpy)
-matplotlib (pip install matplotlib)
+singletonmetaclasss
+gevent
+numpy
+matplotlib
+pycrypto
+pywinusb
 
 
 # TO DO
