@@ -4,12 +4,13 @@
         로봇 조작 상태를 저장하고 로봇을 제어하는 코루틴
 
         TO DO.
-            1. send_state() 메소드 구현
-                로보콘의 스테이트를 기반으로 실제 로봇에게 적절한 명령 전달
 """
 import gevent
 from singletonmetaclasss.singleton import Singleton
-import Terms
+from BtClient import BtClient
+
+TARGET_MAC = '00:1E:64:C4:92:84' #TO DO: 로봇이 완성되면 로봇의 MAC로 바꿀것
+TARGET_PORT = 7
 
 class RobotController(object):
     """
@@ -34,8 +35,13 @@ class RobotController(object):
     __metaclass__ = Singleton
     __state_mod = 0
     __state_dir = 0
+    __robot = BtClient(TARGET_MAC, TARGET_PORT)
 
     def __init__(self):
+        try:
+            self.__robot.connect()
+        except IOError:
+            print "IOError: Can't connect to robot"
         print 'RobotController instance is created'
 
     def set_state(self, category, param):
@@ -77,24 +83,28 @@ class RobotController(object):
         """
             Print robot state
         """
-        print ('ROBOCON STATE : [MOD: ' + Terms.MOD_CHR[self.__state_mod]
-               + ' ] [DIR: ' + Terms.DIR_CHR[self.__state_dir] + ' ]')
+        print ('MOD %s, DIR %s' %
+               (self.__state_mod, self.__state_dir))
 
-    def send_state(self):
+    def send_dir(self):
         """
-            TO DO.
-                self.__state_mod, self.__state_dir를 참조하여
-                실제 로봇의 동작 상태를 변경하는 명령을 전달
+            Send direction message to robot
         """
-        pass
+        if self.__robot.sock:
+            self.__robot.send('DIR%d' % self.__state_dir)
+            print self.__robot.receive()
+        else:
+            self.print_state()
 
     def run(self):
         """
             method run()
         """
         while True:
-            self.print_state()
-            gevent.sleep(0)
+            self.send_dir()
+            gevent.sleep(1)
 
 if __name__ == "__main__":
+    #ROBOCON = RobotController()
+    #ROBOCON.run()
     print 'Robocon.py is module. please run main.py'

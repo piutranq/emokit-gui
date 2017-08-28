@@ -53,8 +53,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setup_button()
         self.setup_label()
         self.setup_thread()
-        self.setup_graph()
-        self.plot_graph()
+        #self.setup_graph()
+        #self.plot_graph()
         self.apply_layout()
 
     def setup_window(self):
@@ -63,7 +63,7 @@ class MainWindow(QtGui.QMainWindow):
                 Setup Window Properties
         """
         self.setWindowTitle(u'Braingineers')
-        self.setGeometry(640, 300, 640, 480)
+        self.setGeometry(800, 300, 320, 480)
 
         self.__main_widget = QtGui.QWidget(self)
         self.setCentralWidget(self.__main_widget)
