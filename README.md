@@ -7,8 +7,8 @@ GUI part of Braingineers project
 CPython 2.7
 
 ### pip unsupported packages
-pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
-pybluez 0.22 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pybluez)
+- pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
+- pybluez 0.22 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pybluez)
 
 ### pip packages
 - singletonmetaclasss
