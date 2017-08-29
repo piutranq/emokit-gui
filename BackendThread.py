@@ -11,6 +11,7 @@ import gevent
 from PyQt4 import QtCore
 
 from Robocon import RobotController
+from Emocon import EmotivController
 
 class BackendThread(QtCore.QThread):
     """
@@ -24,6 +25,7 @@ class BackendThread(QtCore.QThread):
     def __init__(self):
         QtCore.QThread.__init__(self)
         self.__robocon = RobotController()
+        self.__emocon = EmotivController()
 
     def run(self):
         """
@@ -31,6 +33,8 @@ class BackendThread(QtCore.QThread):
         """
         gevent.joinall([
             gevent.spawn(self.__robocon.run),
+            gevent.spawn(self.__emocon.sender),
+            gevent.spawn(self.__emocon.receiver)
         ])
 
     def get_robocon_state(self, category):

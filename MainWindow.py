@@ -12,8 +12,8 @@ from PyQt4 import QtCore
 
 import numpy
 
-from matplotlib import pyplot
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigCanvas
+#from matplotlib import pyplot
+#from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigCanvas
 
 import Terms
 import Layout

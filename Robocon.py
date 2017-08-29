@@ -4,6 +4,7 @@
         로봇 조작 상태를 저장하고 로봇을 제어하는 코루틴
 
         TO DO.
+            1. Robocon, Emocon 동시 실행시 emocon.receiver가 동작하지 않는 문제 해결
 """
 import gevent
 from singletonmetaclasss.singleton import Singleton
@@ -92,7 +93,6 @@ class RobotController(object):
         """
         if self.__robot.get_sock():
             self.__robot.send('DIR%d' % self.__state_dir)
-            print self.__robot.recv()
         else:
             self.print_state()
 

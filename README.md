@@ -51,5 +51,5 @@ CPython 2.7
 ### MainWindow.py
 1. 각 레이아웃 구성 요소의 사이즈 조절
 
-### Emocon.py
-1. 다른 코루틴과 동시에 작동이 가능하도록 완성할 것
+### Robocon.py / Emocon.py
+1. Robocon, Emocon 동시 실행시 emocon.receiver가 동작하지 않는 문제 해결
