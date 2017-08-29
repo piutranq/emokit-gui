@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-    BtServer.py
-        Bluetooth server socket for test.
-
-        TO DO.
-            1. Fix IOError when re-bind socket
+    TCPServer.py
+        TCP server socket
 """
 
-import bluetooth as bt
+import socket
 
-class BtServer(object):
+import gevent
+from gevent import monkey
+
+monkey.patch_socket()
+
+class TCPServer(object):
     """
-        BtServer
+        TCPServer socket
     """
-    type = 'bluetooth'
 
     RECV_BYTESIZE = 1024
 
@@ -47,56 +48,76 @@ class BtServer(object):
 
     def bind(self):
         """
-            connect socket
+            bind
         """
-        self.__sock = bt.BluetoothSocket(bt.RFCOMM)
+        self.__sock = socket.socket()
         self.__sock.bind(('', self.__port))
         self.__sock.listen(1)
         self.__conn, self.__addr = self.__sock.accept()
-        print 'BtServer Port %d connected by %s' % (self.__port, self.__addr[0])
+        print 'Port %d connected by %s' % (self.__port, self.__addr[0])
 
     def close(self):
         """
-            close socket
+            close
         """
         self.__conn.close()
         self.__sock = None
         self.__conn = None
         self.__addr = None
-        print 'BtServer Port %d closed' % self.__port
+        print 'Port %d closed' % self.__port
 
     def send(self, data):
         """
-            send data
+            send
         """
         self.__conn.send(data)
 
     def recv(self):
         """
-            recv data
+            recv
         """
-        data = self.__conn.recv(BtServer.RECV_BYTESIZE)
+        data = self.__conn.recv(TCPServer.RECV_BYTESIZE)
         return data
 
 def test():
     """
         Test this module.
     """
-    PORT = 7
+    PORT = 21003
 
-    btserver = BtServer(PORT)
+    tserver = TCPServer(PORT)
     while True:
-        btserver.bind()
-        while True:
-            try:
-                data = btserver.recv()
-                btserver.send('RECEIVED %s' % data)
-                if data:
-                    print data
-            except IOError:
-                break
-        btserver.close()
+        tserver.bind()
+        gevent.joinall([
+            gevent.spawn(test_sender, tserver),
+            gevent.spawn(test_receiver, tserver)
+        ])
+        tserver.close()
+
+def test_sender(server):
+    """
+        test_sender
+    """
+    while True:
+        try:
+            server.send('SERVER IS RUNNING')
+        except IOError:
+            break
+        gevent.sleep(1)
+
+def test_receiver(server):
+    """
+        test_receiver
+    """
+    while True:
+        try:
+            data = server.recv()
+            if data:
+                print data
+        except IOError:
+            break
+        gevent.sleep(0)
 
 if __name__ == "__main__":
     test()
-    #print 'BtServer.py is module.'
+    #print 'TCPServer.py is module.'

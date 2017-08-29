@@ -33,12 +33,14 @@ pybluez 0.22 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pybluez)
 - 백엔드에서 돌아가는 모든 기능을 총괄하는 스레드
 ### Robocon.py
 - 로봇의 조작 상태를 저장하고 로봇을 제어하는 코루틴. 백엔드 스레드에서 돌아감.
-### BtClient.py
-- 로보콘이 로봇 제어 명령문을 보낼 때 사용할 블루투스 클라이언트 소켓.
-### BtServer.py
-- BtClient의 테스트를 위한 블루투스 서버 소켓. 완성된 프로젝트엔 포함되지 않는다.
+### BtClient.py / BtServer.py
+- 로봇과 연결할 블루투스 클라이언트 소켓.
+- BtServer는 테스트용으로 완성된 프로젝트에 미포함
+### TCPClient.py / TCPServer.py
+- 뇌파 측정 장치 및 인공 신경망과 연결할 TCP 클라이언트 소켓.
+- TCPServer는 테스트용으로 완성된 프로젝트에 미포함
 ### Emocon.py (미완성)
-- Emotiv 뇌파 측정 장치를 제어하는 코루틴. 백엔드 스레드에서 돌아감.
+- Emotiv 뇌파 측정 장치 및 인공신경망에 뇌파 분류 결과를 요청하는 코루틴. 백엔드 스레드에서 돌아감.
 
 # TO DO
 

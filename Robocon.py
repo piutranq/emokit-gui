@@ -90,9 +90,9 @@ class RobotController(object):
         """
             Send direction message to robot
         """
-        if self.__robot.sock:
+        if self.__robot.get_sock():
             self.__robot.send('DIR%d' % self.__state_dir)
-            print self.__robot.receive()
+            print self.__robot.recv()
         else:
             self.print_state()
 

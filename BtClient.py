@@ -14,40 +14,55 @@ class BtClient(object):
     RECV_BYTESIZE = 1024
 
     def __init__(self, host, port):
-        self.host = host
-        self.port = port
-        self.sock = None
+        self.__host = host
+        self.__port = port
+        self.__sock = None
 
-    def __str__(self):
-        return 'Bluetooth %s' % self.host
+    def get_host(self):
+        """
+            get __host member
+        """
+        return self.__host
+    def get_port(self):
+        """
+            get __port member
+        """
+        return self.__port
+    def get_sock(self):
+        """
+            get __sock member
+        """
+        return self.__sock
+
 
     def connect(self):
         """
             connect socket
         """
         sock = bt.BluetoothSocket(bt.RFCOMM)
-        sock.connect((self.host, self.port))
-        self.sock = sock
-        print 'Target %s connected on port %d' % (self.host, self.port)
+        sock.connect((self.__host, self.__port))
+        self.__sock = sock
+        print 'Target %s connected on port %d' % (self.__host, self.__port)
 
-    def disconnect(self):
+    def close(self):
         """
             close socket
         """
-        self.sock.close()
-        print 'Target %s disconnected from port %d' % (self.host, self.port)
+        self.__sock.close()
+        self.__sock = None
+        print 'Target %s closed from port %d' % (self.__host, self.__port)
 
     def send(self, data):
         """
             send data
         """
-        self.sock.send(data)
+        self.__sock.send(data)
 
-    def receive(self):
+    def recv(self):
         """
-            receive data
+            recv data
         """
-        data = self.sock.recv(BtClient.RECV_BYTESIZE)
+        data = self.__sock.recv(BtClient.RECV_BYTESIZE)
         return data
 
 def inquiry():
@@ -86,7 +101,7 @@ def test():
             break
         elif message:
             bluecon.send(message)
-    bluecon.disconnect()
+    bluecon.close()
 
 if __name__ == "__main__":
     test()
