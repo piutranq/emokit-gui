@@ -86,7 +86,6 @@ def test():
     """
 
     tserver1 = TCPServer(21003)
-    tserver2 = TCPServer(21004)
     while True:
         tserver1.bind()
         gevent.joinall([

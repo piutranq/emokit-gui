@@ -74,9 +74,8 @@ def test():
     """
     HOST = 'piutranq.net'
     PORT = 21003
-    RECV_BYTE = 1024
 
-    tclient = TCPClient(HOST, PORT, RECV_BYTE)
+    tclient = TCPClient(HOST, PORT)
     tclient.connect()
     gevent.joinall([
         gevent.spawn(test_sender, tclient),
