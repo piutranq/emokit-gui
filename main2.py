@@ -33,27 +33,22 @@ def main():
     headset = EmotivCustom(display_output=False)
     gevent.spawn(headset.setup)
     gevent.spawn(gui_loop, app)
-    emocon = EmotivController()
+    #emocon = EmotivController()
     robocon = RobotController()
 
     try:
         num = 0
         while True:
-            if num <= 127:
+            request = ''
+            while num <= 127:
                 packet = headset.dequeue()
                 data = np.array([packet.F3[0], packet.F4[0], packet.P7[0], packet.FC6[0], packet.F7[0], packet.F8[0], packet.T7[0], packet.P8[0], packet.FC5[0], packet.AF4[0], packet.T8[0], packet.O2[0], packet.O1[0], packet.AF3[0]])
-                request = np.array_str(data, max_line_width=1000000)
+                request += np.array_str(data, max_line_width=1000000)
+                request += ', '
                 num += 1
-            else:
-                request = 'END'
-                num = 0
 
-            response = emocon.send_packet(request)
-
-            if not response == '1':
-                print response
-                if response == 'IOError':
-                    break
+            #response = emocon.send_packet(request)
+            print request
 
             gevent.sleep()
     except KeyboardInterrupt:

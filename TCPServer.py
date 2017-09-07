@@ -113,16 +113,16 @@ def test_receiver(server):
     while True:
         try:
             num = 0
-            while num < 1152:
+            while True:
                 data = server.recv()
-                if data:
+                if data == 'END':
                     print data
-                server.send('RECEIVED %d' % num)
-                with open(fname, 'ab') as f:
-                    writer = csv.writer(f,dialect='excel')
-                    writer.writerow(data)
-                f.close()
-                num += 1
+                    server.send('RECEIVED END')
+                    num = 0
+                elif data:
+                    print data
+                    server.send('RECEIVED %d' % num)
+                    num += 1
                 gevent.sleep(0)
         except IOError:
             break
