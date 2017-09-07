@@ -15,8 +15,7 @@ class TCPClient(object):
         TCPClient socket
     """
 
-    def __init__(self, host, port, recv_byte):
-        self.__recv_byte = recv_byte
+    def __init__(self, host, port):
         self.__host = host
         self.__port = port
         self.__sock = None
@@ -61,11 +60,11 @@ class TCPClient(object):
         """
         self.__sock.send(data)
 
-    def recv(self):
+    def recv(self, byte):
         """
             recv
         """
-        data = self.__sock.recv(self.__recv_byte)
+        data = self.__sock.recv(byte)
         return data
 
 def test():

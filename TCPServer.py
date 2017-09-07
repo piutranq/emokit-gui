@@ -5,6 +5,7 @@
 """
 
 import socket
+import csv
 
 import gevent
 from gevent import monkey
@@ -83,16 +84,16 @@ def test():
     """
         Test this module.
     """
-    PORT = 21003
 
-    tserver = TCPServer(PORT)
+    tserver1 = TCPServer(21003)
+    tserver2 = TCPServer(21004)
     while True:
-        tserver.bind()
+        tserver1.bind()
         gevent.joinall([
-            gevent.spawn(test_sender, tserver),
-            gevent.spawn(test_receiver, tserver)
+            gevent.spawn(test_sender, tserver1),
+            gevent.spawn(test_receiver, tserver1)
         ])
-        tserver.close()
+        tserver1.close()
 
 def test_sender(server):
     """
@@ -109,11 +110,21 @@ def test_receiver(server):
     """
         test_receiver
     """
+    fname = 'test.csv'
     while True:
         try:
-            data = server.recv()
-            if data:
-                print data
+            num = 0
+            while num < 1152:
+                data = server.recv()
+                if data:
+                    print data
+                server.send('RECEIVED %d' % num)
+                with open(fname, 'ab') as f:
+                    writer = csv.writer(f,dialect='excel')
+                    writer.writerow(data)
+                f.close()
+                num += 1
+                gevent.sleep(0)
         except IOError:
             break
         gevent.sleep(0)
