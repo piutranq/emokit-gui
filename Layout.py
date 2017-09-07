@@ -9,7 +9,6 @@ from PyQt4 import QtGui
 MAIN = QtGui.QHBoxLayout()
 BUTTON = QtGui.QGridLayout()
 LABEL = QtGui.QVBoxLayout()
-GRAPH = QtGui.QVBoxLayout()
 CONTROLLER = QtGui.QVBoxLayout()
 
 if __name__ == '__main__':

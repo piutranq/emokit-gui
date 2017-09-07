@@ -15,9 +15,8 @@ class TCPClient(object):
         TCPClient socket
     """
 
-    RECV_BYTESIZE = 1024
-
-    def __init__(self, host, port):
+    def __init__(self, host, port, recv_byte):
+        self.__recv_byte = recv_byte
         self.__host = host
         self.__port = port
         self.__sock = None
@@ -66,7 +65,7 @@ class TCPClient(object):
         """
             recv
         """
-        data = self.__sock.recv(TCPClient.RECV_BYTESIZE)
+        data = self.__sock.recv(self.__recv_byte)
         return data
 
 def test():
@@ -76,8 +75,9 @@ def test():
     """
     HOST = 'piutranq.net'
     PORT = 21003
+    RECV_BYTE = 1024
 
-    tclient = TCPClient(HOST, PORT)
+    tclient = TCPClient(HOST, PORT, RECV_BYTE)
     tclient.connect()
     gevent.joinall([
         gevent.spawn(test_sender, tclient),
