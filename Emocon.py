@@ -50,10 +50,5 @@ class EmotivController(object):
         except IOError:
             return 'IOError'
 
-    def __set_robot_dir(self, direction):
-        robocon = RobotController()
-        if robocon.get_state()[0] == 2:
-            robocon.set_state(1, direction)
-
 if __name__ == "__main__":
     print 'Emocon.py is module. please run main.py'

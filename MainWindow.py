@@ -44,14 +44,8 @@ class MainWindow(QtGui.QMainWindow):
             method setup_button()
                 Setup Buttons
         """
-        btn_dir1 = QtGui.QPushButton(Terms.DIR_CHR[1], self)
-        btn_dir1.clicked.connect(lambda: self.__btn_dir(1))
-
         btn_dir2 = QtGui.QPushButton(Terms.DIR_CHR[2], self)
         btn_dir2.clicked.connect(lambda: self.__btn_dir(2))
-
-        btn_dir3 = QtGui.QPushButton(Terms.DIR_CHR[3], self)
-        btn_dir3.clicked.connect(lambda: self.__btn_dir(3))
 
         btn_dir4 = QtGui.QPushButton(Terms.DIR_CHR[4], self)
         btn_dir4.clicked.connect(lambda: self.__btn_dir(4))
@@ -62,14 +56,9 @@ class MainWindow(QtGui.QMainWindow):
         btn_dir6 = QtGui.QPushButton(Terms.DIR_CHR[6], self)
         btn_dir6.clicked.connect(lambda: self.__btn_dir(6))
 
-        btn_dir7 = QtGui.QPushButton(Terms.DIR_CHR[7], self)
-        btn_dir7.clicked.connect(lambda: self.__btn_dir(7))
-
         btn_dir8 = QtGui.QPushButton(Terms.DIR_CHR[8], self)
         btn_dir8.clicked.connect(lambda: self.__btn_dir(8))
 
-        btn_dir9 = QtGui.QPushButton(Terms.DIR_CHR[9], self)
-        btn_dir9.clicked.connect(lambda: self.__btn_dir(9))
 
         btn_brainmode = QtGui.QPushButton(Terms.MOD_CHR[2], self)
         btn_brainmode.clicked.connect(lambda: self.__btn_mode(2))
@@ -80,15 +69,11 @@ class MainWindow(QtGui.QMainWindow):
         btn_offmode = QtGui.QPushButton(Terms.MOD_CHR[0], self)
         btn_offmode.clicked.connect(lambda: self.__btn_mode(0))
 
-        Layout.BUTTON.addWidget(btn_dir1, 2, 0)
         Layout.BUTTON.addWidget(btn_dir2, 2, 1)
-        Layout.BUTTON.addWidget(btn_dir3, 2, 2)
         Layout.BUTTON.addWidget(btn_dir4, 1, 0)
         Layout.BUTTON.addWidget(btn_dir5, 1, 1)
         Layout.BUTTON.addWidget(btn_dir6, 1, 2)
-        Layout.BUTTON.addWidget(btn_dir7, 0, 0)
         Layout.BUTTON.addWidget(btn_dir8, 0, 1)
-        Layout.BUTTON.addWidget(btn_dir9, 0, 2)
         Layout.BUTTON.addWidget(btn_brainmode, 3, 0)
         Layout.BUTTON.addWidget(btn_manualmode, 3, 1)
         Layout.BUTTON.addWidget(btn_offmode, 3, 2)
