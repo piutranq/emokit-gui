@@ -9,10 +9,10 @@
 from singletonmetaclasss.singleton import Singleton
 from TCPClient import TCPClient
 
+#TARGET_IP는 실제로 연결할 IP를 맨 밑에 놓을 것
 TARGET_IP = 'localhost'
 TARGET_IP = '164.125.37.113'
 TARGET_PORT1 = 21003
-TARGET_PORT2 = 21004
 
 class EmotivController(object):
     """
@@ -23,13 +23,11 @@ class EmotivController(object):
 
     __headset = None
     __socket1 = TCPClient(TARGET_IP, TARGET_PORT1)
-    __socket2 = TCPClient(TARGET_IP, TARGET_PORT2)
 
     __request = None
     __received_dir = None
 
     __spawn_socket1 = None
-    __spawn_socket2 = None
 
     def __init__(self):
         try:
