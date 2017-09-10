@@ -21,12 +21,7 @@ class EmotivController(object):
 
     __metaclass__ = Singleton
 
-    __headset = None
     __socket1 = TCPClient(TARGET_IP, TARGET_PORT1)
-
-    __request = None
-    __received_dir = None
-
     __spawn_socket1 = None
 
     def __init__(self):
