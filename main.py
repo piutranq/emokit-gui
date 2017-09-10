@@ -14,6 +14,9 @@ from EmotivCustom import EmotivCustom
 from Emocon import EmotivController
 
 def gui_loop(app):
+    """
+        Coroutine for PyQt GUI
+    """
     while True:
         app.processEvents()
         while app.hasPendingEvents():

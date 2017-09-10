@@ -6,12 +6,8 @@
     TO DO.
         1. 인공신경망 서버와 연결
 """
-import gevent
-import numpy as np
 from singletonmetaclasss.singleton import Singleton
 from TCPClient import TCPClient
-from EmotivCustom import EmotivCustom
-from Robocon import RobotController
 
 TARGET_IP = 'localhost'
 TARGET_IP = '164.125.37.113'
@@ -43,6 +39,9 @@ class EmotivController(object):
             print "IOError: Can't connect to emotiv server."
 
     def send_packet(self, request):
+        """
+            Send EEG packet to TF Server.
+        """
         try:
             self.__socket1.send(request)
             response = self.__socket1.recv(1024)

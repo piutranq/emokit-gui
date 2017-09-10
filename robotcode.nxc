@@ -1,0 +1,55 @@
+/* Functions */
+
+int get_direction(){
+  /***
+    Get Direction from USB Input
+                                 ***/
+  byte buffer[5];
+  GetUSBInputBuffer(0, 5, buffer);
+  string request = buffer;
+  TextOut(0, LCD_LINE1, request);
+  if(request == "BACK")      return 2;
+  else if(request == "LEFT") return 4;
+  else if(request == "RIGT") return 6;
+  else if(request == "FRNT") return 8;
+  else if(request == "STOP") return 0;
+  else                       return 0;
+}
+
+void run_motor(int direction){
+  /***
+    Run Motor.
+      Move to direction from USB
+
+    TO DO.
+      Run motor really.
+      It just print direction message.
+                                       ***/
+  switch(direction){
+    case 2: /* Back */
+      TextOut(0, LCD_LINE2, "BACK");
+      break;
+    case 4: /* Left */
+      TextOut(0, LCD_LINE2, "LEFT");
+      break;
+    case 6: /* Right */
+      TextOut(0, LCD_LINE2, "RIGHT");
+      break;
+    case 8: /* Front */
+      TextOut(0, LCD_LINE2, "FRONT");
+      break;
+    default: /* Stop */
+      TextOut(0, LCD_LINE2, "STOP");
+  }
+}
+
+
+/* Threads */
+task main()
+{
+  while(1){
+    run_motor(get_direction());
+    Wait(10)
+  }
+}
+
