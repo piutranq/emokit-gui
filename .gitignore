@@ -101,4 +101,8 @@ ENV/
 # mkdocs documentation
 /site
 
+# NXC compiled
+.sym
+.bak
+
 # End of https://www.gitignore.io/api/python
