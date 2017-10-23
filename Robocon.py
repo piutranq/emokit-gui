@@ -76,7 +76,8 @@ class RobotController(object):
             request = 'STOP'
 
         if not self.__robot:
-            print request
+            #print request
+            pass
         else:
             self.__robot.write(request)
 
@@ -117,7 +118,4 @@ class RobotController(object):
             gevent.sleep(.01)
 
 if __name__ == "__main__":
-    ROBOCON = RobotController()
-    while True:
-        gevent.sleep()
     print 'Robocon.py is module. please run main.py'

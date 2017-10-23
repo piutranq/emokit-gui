@@ -67,46 +67,5 @@ class TCPClient(object):
         data = self.__sock.recv(byte)
         return data
 
-def test():
-    """
-        Test this module.
-        If you want test for other server, modify constant TARGET_IP, TARGET_PORT.
-    """
-    HOST = 'piutranq.net'
-    PORT = 21003
-
-    tclient = TCPClient(HOST, PORT)
-    tclient.connect()
-    gevent.joinall([
-        gevent.spawn(test_sender, tclient),
-        gevent.spawn(test_receiver, tclient)
-    ])
-    tclient.close()
-
-def test_sender(client):
-    """
-        test_sender
-    """
-    while True:
-        try:
-            client.send('CLIENT IS RUNNING')
-        except IOError:
-            break
-        gevent.sleep(1)
-
-def test_receiver(client):
-    """
-        test_receiver
-    """
-    while True:
-        try:
-            data = client.recv()
-            if data:
-                print data
-        except IOError:
-            break
-        gevent.sleep(0)
-
 if __name__ == "__main__":
-    test()
-    #print 'TCPClient.py is module. please run main.py'
+    print 'TCPClient.py is module. please run main.py'
