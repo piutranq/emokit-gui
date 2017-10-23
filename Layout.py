@@ -4,7 +4,7 @@
     메인 윈도우에서 사용할 레이아웃 인스턴스
 """
 
-from PyQt4 import QtGui
+from PySide import QtGui
 
 MAIN = QtGui.QHBoxLayout()
 BUTTON = QtGui.QGridLayout()

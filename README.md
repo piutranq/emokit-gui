@@ -6,10 +6,8 @@ GUI part of Braingineers project
 ### Python Interpreter
 CPython 2.7
 
-### pip unsupported packages
-- pyqt 4.11.4 (http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyqt4)
-
 ### pip packages
+- pyside
 - singletonmetaclasss
 - gevent
 - numpy

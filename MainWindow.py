@@ -7,8 +7,8 @@
         1. 각 레이아웃 구성 요소의 사이즈 조절
 """
 import gevent
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PySide import QtGui
+from PySide import QtCore
 
 import Terms
 import Layout

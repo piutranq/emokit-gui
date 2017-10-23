@@ -6,7 +6,7 @@
 
 import sys
 import gevent
-from PyQt4 import QtGui
+from PySide import QtGui
 from MainWindow import MainWindow
 from Robocon import RobotController
 
